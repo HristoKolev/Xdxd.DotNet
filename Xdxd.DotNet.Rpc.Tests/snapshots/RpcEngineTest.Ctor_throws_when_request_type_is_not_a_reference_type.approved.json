@@ -1,0 +1,11 @@
+﻿[
+  {
+    "Details": {},
+    "Fingerprint": null,
+    "Message": "Request type StructRequestTypeRequest must be a reference type.",
+    "Data": {},
+    "HelpLink": null,
+    "Source": "Xdxd.DotNet.Rpc",
+    "HResult": -2146233088
+  }
+]

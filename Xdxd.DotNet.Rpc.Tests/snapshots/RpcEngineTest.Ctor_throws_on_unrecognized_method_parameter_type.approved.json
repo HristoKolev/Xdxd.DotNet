@@ -1,0 +1,11 @@
+﻿[
+  {
+    "Details": {},
+    "Fingerprint": null,
+    "Message": "Parameter of type StringBuilder is not supported for RPC methods. UnrecognizedParameterTestHandler.RpcMethod",
+    "Data": {},
+    "HelpLink": null,
+    "Source": "Xdxd.DotNet.Rpc",
+    "HResult": -2146233088
+  }
+]

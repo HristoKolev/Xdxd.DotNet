@@ -1,0 +1,17 @@
+﻿[
+  {
+    "Details": {
+      "bytePositionInLine": 15,
+      "lineNumber": 0,
+      "jsonPath": "$.data",
+      "base64Data": "eyAiZGF0YSI6IDEyMzQ1Q0FUIH0=",
+      "outputType": "Xdxd.DotNet.Shared.Tests.JsonHelperTest+TestJsonPayload"
+    },
+    "Fingerprint": null,
+    "Message": "Failed deserialize json.",
+    "Data": {},
+    "HelpLink": null,
+    "Source": "Xdxd.DotNet.Shared",
+    "HResult": -2146233088
+  }
+]

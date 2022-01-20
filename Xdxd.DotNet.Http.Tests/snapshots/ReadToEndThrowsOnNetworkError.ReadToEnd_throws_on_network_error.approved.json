@@ -1,0 +1,13 @@
+﻿[
+  {
+    "Details": {
+      "contentLength": 10050
+    },
+    "Fingerprint": "HTTP_FAILED_TO_READ_REQUEST_BODY",
+    "Message": "Failed to read the HTTP request body.",
+    "Data": {},
+    "HelpLink": null,
+    "Source": "Xdxd.DotNet.Http",
+    "HResult": -2146233088
+  }
+]

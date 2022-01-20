@@ -1,0 +1,11 @@
+﻿[
+  {
+    "Details": {},
+    "Fingerprint": null,
+    "Message": "Middleware type NonConformingMiddleware does not implement RpcMiddleware.",
+    "Data": {},
+    "HelpLink": null,
+    "Source": "Xdxd.DotNet.Rpc",
+    "HResult": -2146233088
+  }
+]

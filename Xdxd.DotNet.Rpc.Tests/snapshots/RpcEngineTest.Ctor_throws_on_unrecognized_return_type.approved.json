@@ -1,0 +1,11 @@
+﻿[
+  {
+    "Details": {},
+    "Fingerprint": null,
+    "Message": "Only Task<Xdxd.DotNet.Rpc.Tests.SimpleResponse1> and Task<Result<Xdxd.DotNet.Rpc.Tests.SimpleResponse1>> are supported for handler method `UnrecognizedReturnTypeTestHandler.RpcMethod`.",
+    "Data": {},
+    "HelpLink": null,
+    "Source": "Xdxd.DotNet.Rpc",
+    "HResult": -2146233088
+  }
+]

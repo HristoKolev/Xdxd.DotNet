@@ -1,0 +1,11 @@
+﻿[
+  {
+    "Details": {},
+    "Fingerprint": null,
+    "Message": "RpcBindAttribute must have not null ResponseType. NullResponseTypeHandler.RpcMethod",
+    "Data": {},
+    "HelpLink": null,
+    "Source": "Xdxd.DotNet.Rpc",
+    "HResult": -2146233088
+  }
+]
