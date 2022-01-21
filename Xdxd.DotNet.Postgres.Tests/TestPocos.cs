@@ -12,7 +12,7 @@ using LinqToDB;
 using LinqToDB.Mapping;
 using Npgsql;
 using NpgsqlTypes;
-using Postgres;
+using Xdxd.DotNet.Postgres;
 
 /// <summary>
 /// <para>Table name: 'test1'.</para>

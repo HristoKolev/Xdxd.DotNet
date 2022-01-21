@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <IsPackable>true</IsPackable>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <Version>1.0.0</Version>
+    <PackageVersion>1.0.0</PackageVersion>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>xdxd-dotnet-postgres-poco-generator</ToolCommandName>
+    <AssemblyName>xdxd-dotnet-postgres-poco-generator</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Xdxd.DotNet.Postgres\Xdxd.DotNet.Postgres.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Humanizer.Core" Version="2.13.14" />
+    <PackageReference Include="RenderRazor" Version="1.0.4" />
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="poco-template.txt" />
+    <EmbeddedResource Include="poco-template.txt" />
+  </ItemGroup>
+</Project>

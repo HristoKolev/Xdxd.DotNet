@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xdxd.DotNet.Logging.Tests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xdxd.DotNet.Http.Tests", "Xdxd.DotNet.Http.Tests\Xdxd.DotNet.Http.Tests.csproj", "{49F03AE8-781E-402C-BEBE-CE170941AEDC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xdxd.DotNet.Postgres.PocoGenerator", "Xdxd.DotNet.Postgres.PocoGenerator\Xdxd.DotNet.Postgres.PocoGenerator.csproj", "{B1B4E7E4-9E86-4FB4-B9BE-3E8354B5943F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,10 @@ Global
 		{49F03AE8-781E-402C-BEBE-CE170941AEDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49F03AE8-781E-402C-BEBE-CE170941AEDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49F03AE8-781E-402C-BEBE-CE170941AEDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1B4E7E4-9E86-4FB4-B9BE-3E8354B5943F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1B4E7E4-9E86-4FB4-B9BE-3E8354B5943F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1B4E7E4-9E86-4FB4-B9BE-3E8354B5943F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1B4E7E4-9E86-4FB4-B9BE-3E8354B5943F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
