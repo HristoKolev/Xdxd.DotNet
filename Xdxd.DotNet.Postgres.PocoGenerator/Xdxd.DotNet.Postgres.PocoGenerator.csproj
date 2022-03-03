@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Humanizer.Core" Version="2.13.14" />
+    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
     <PackageReference Include="RenderRazor" Version="1.0.4" />
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
   </ItemGroup>

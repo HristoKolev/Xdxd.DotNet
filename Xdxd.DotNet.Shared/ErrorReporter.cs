@@ -3,10 +3,8 @@ namespace Xdxd.DotNet.Shared;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Toolkit.HighPerformance.Buffers;
 using Sentry;
@@ -34,7 +32,6 @@ public class ErrorReporterImpl : ErrorReporter
 {
     private readonly ErrorReporterImplConfig config;
     private static readonly TimeSpan SentryFlushTimeout = TimeSpan.FromSeconds(60);
-    private static readonly Regex GiudRegex = new Regex("[0-9A-f]{8}(-[0-9A-f]{4}){3}-[0-9A-f]{12}", RegexOptions.Compiled);
 
     private readonly AsyncLock sentryFlushLock;
     private readonly ISentryClient sentryClient;
@@ -121,7 +118,11 @@ public class ErrorReporterImpl : ErrorReporter
         }
 
         // Set the fingerprint.
-        sentryEvent.SetFingerprint(GetFingerprint(exceptionChain, explicitFingerprint));
+        var fingerprint = GetFingerprint(exceptionChain, explicitFingerprint);
+        if (fingerprint != null)
+        {
+            sentryEvent.SetFingerprint(fingerprint);
+        }
 
         TrimEvent(sentryEvent);
 
@@ -202,7 +203,7 @@ public class ErrorReporterImpl : ErrorReporter
             return new[] { exceptionFingerprint };
         }
 
-        return exceptions.Select(GetFingerprint).ToArray();
+        return null;
     }
 
     private static void ApplyExtras(IHasExtra sentryEvent, Dictionary<string, object> data)
@@ -233,32 +234,6 @@ public class ErrorReporterImpl : ErrorReporter
         list.Reverse();
 
         return list;
-    }
-
-    private static string GetFingerprint(Exception exception)
-    {
-        static (string, string) GetMethodData(StackFrame stackFrame)
-        {
-            var method = stackFrame.GetMethod();
-
-            if (method == null)
-            {
-                return (null, null);
-            }
-
-            return (method.DeclaringType?.FullName ?? "(unknown)", method.Name);
-        }
-
-        var methodsData = new StackTrace(exception)
-            .GetFrames()
-            .Select(GetMethodData)
-            .Where(x => !string.IsNullOrWhiteSpace(x.Item1) && !string.IsNullOrWhiteSpace(x.Item2))
-            .Reverse()
-            .ToList();
-
-        string frames = string.Join("\n", methodsData.Select(x => $"{x.Item1} => {x.Item2}"));
-        frames = GiudRegex.Replace(frames, "00000000-0000-0000-0000-000000000000");
-        return $"[{exception.GetType()}]\n{frames}";
     }
 }
 
