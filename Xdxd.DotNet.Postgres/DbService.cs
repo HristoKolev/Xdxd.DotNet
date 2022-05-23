@@ -750,7 +750,7 @@ public class Linq2DbWrapper : IDisposable, ILinqProvider
 
     public IQueryable<T> GetTable<T>() where T : class, IReadOnlyPoco<T>
     {
-        this.linq2Db ??= new DataConnection(new PostgreSQLDataProvider(), this.connection, false);
+        this.linq2Db ??= PostgreSQLTools.CreateDataConnection(this.connection, PostgreSQLVersion.v95);
 
         return this.linq2Db.GetTable<T>();
     }

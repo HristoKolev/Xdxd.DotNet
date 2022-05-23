@@ -12,6 +12,7 @@ using LinqToDB;
 using LinqToDB.Mapping;
 using Npgsql;
 using NpgsqlTypes;
+// ReSharper disable once RedundantNameQualifier
 using Xdxd.DotNet.Postgres;
 
 /// <summary>
