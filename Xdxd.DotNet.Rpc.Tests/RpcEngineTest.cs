@@ -1051,12 +1051,12 @@ public class RpcEngineTest
 
     public class ResultOfResponseTypeTestHandler
     {
-        public static Result<SimpleResponse1> ResultValue { get; set; }
+        public static Result<SimpleResponse1, object> ResultValue { get; set; }
 
         [RpcBind(typeof(SimpleRequest1), typeof(SimpleResponse1))]
-        public Task<Result<SimpleResponse1>> RpcMethod(SimpleRequest1 request)
+        public Task<Result<SimpleResponse1, object>> RpcMethod(SimpleRequest1 request)
         {
-            ResultValue = Result.Ok(new SimpleResponse1());
+            ResultValue = new Result<SimpleResponse1, object>(true, new SimpleResponse1(), default);
             return Task.FromResult(ResultValue);
         }
     }
@@ -1084,14 +1084,14 @@ public class RpcEngineTest
 
         var result = await rpcEngine.Execute(rpcRequestMessage, GetDefaultInstanceProvider());
 
-        Assert.Equal("test123", result.ErrorMessages[0]);
+        Assert.Equal("test123", ((string[])result.Error)[0]);
     }
 
     public class SimpleResultMiddleware : RpcMiddleware
     {
         public Task Run(RpcContext context, InstanceProvider instanceProvider, RpcRequestDelegate next)
         {
-            var result = Result.Error("test123");
+            var result = new Result<object, object>(false, default, new[] { "test123" });
 
             context.SetResponse(result);
 
@@ -1230,12 +1230,12 @@ public class RpcEngineTest
     public class ObjectTaskOfResultOfResponseTestHandler
     {
         [RpcBind(typeof(ExecutorTestRequest), typeof(ExecutorTestResponse))]
-        public Task<Result<ExecutorTestResponse>> RpcMethod1(ExecutorTestRequest req)
+        public Task<Result<ExecutorTestResponse, object>> RpcMethod1(ExecutorTestRequest req)
         {
-            return Task.FromResult(Result.Ok(new ExecutorTestResponse
+            return Task.FromResult(new Result<ExecutorTestResponse, object>(true, new ExecutorTestResponse
             {
                 Number = 123,
-            }));
+            }, default));
         }
     }
 
@@ -1262,15 +1262,15 @@ public class RpcEngineTest
 
         var result = await rpcEngine.Execute(rpcRequestMessage, GetDefaultInstanceProvider());
 
-        Assert.Equal("test123", result.ErrorMessages[0]);
+        Assert.Equal("test123", ((string[])result.Error)[0]);
     }
 
     public class ObjectTaskOfResultTestHandler
     {
         [RpcBind(typeof(ExecutorTestRequest), typeof(ExecutorTestResponse))]
-        public Task<Result<ExecutorTestResponse>> RpcMethod1(ExecutorTestRequest req)
+        public Task<Result<ExecutorTestResponse, object>> RpcMethod1(ExecutorTestRequest req)
         {
-            return Task.FromResult(Result.Ok(new ExecutorTestResponse
+            return Task.FromResult(ResultBase.Ok(new ExecutorTestResponse
             {
                 Number = 123,
             }));
@@ -1281,7 +1281,7 @@ public class RpcEngineTest
     {
         public Task Run(RpcContext context, InstanceProvider instanceProvider, RpcRequestDelegate next)
         {
-            var result = Result.Error("test123");
+            var result = new Result<object, object>(false, default, new[] { "test123" });
 
             context.SetResponse(result);
 
@@ -1328,9 +1328,9 @@ public class RpcEngineTest
     public class GetMetadataByRequestNameTestHandler
     {
         [RpcBind(typeof(ExecutorTestRequest), typeof(ExecutorTestResponse))]
-        public Task<Result<ExecutorTestResponse>> RpcMethod1(ExecutorTestRequest req)
+        public Task<Result<ExecutorTestResponse, object>> RpcMethod1(ExecutorTestRequest req)
         {
-            return Task.FromResult(Result.Ok(new ExecutorTestResponse()));
+            return Task.FromResult(new Result<ExecutorTestResponse, object>(true, new ExecutorTestResponse(), default));
         }
     }
 

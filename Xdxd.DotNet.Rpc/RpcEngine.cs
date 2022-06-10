@@ -12,7 +12,7 @@ public class RpcEngine
 {
     private Dictionary<string, RpcRequestMetadata> metadataByRequestName;
 
-    private Func<Task, Result<object>> convertReturnValue;
+    private Func<Task, Result<object, object>> convertReturnValue;
 
     public RpcEngine(RpcEngineOptions options)
     {
@@ -20,6 +20,29 @@ public class RpcEngine
     }
 
     public List<RpcRequestMetadata> Metadata { get; private set; }
+
+    private static void ValidateReturnType(RpcRequestMetadata metadata)
+    {
+        var returnType = metadata.HandlerMethod.ReturnType;
+
+        if (returnType == typeof(Task<>).MakeGenericType(metadata.ResponseType))
+        {
+            return;
+        }
+
+        bool invalid = !returnType.IsGenericType ||
+                       returnType.GetGenericTypeDefinition() != typeof(Task<>) ||
+                       !returnType.GenericTypeArguments.First().IsGenericType ||
+                       returnType.GenericTypeArguments.First().GetGenericTypeDefinition() != typeof(Result<,>) ||
+                       returnType.GenericTypeArguments.First().GenericTypeArguments.First() != metadata.ResponseType;
+
+        if (invalid)
+        {
+            throw new DetailedException(
+                $"Only {nameof(Task)}<{metadata.ResponseType}> and {nameof(Task)}<{nameof(Result<object, object>)}<{metadata.ResponseType}, TError>> are supported for" +
+                $" handler method `{metadata.DeclaringType.Name}.{metadata.HandlerMethod.Name}`.");
+        }
+    }
 
     private void Build(RpcEngineOptions options)
     {
@@ -141,17 +164,7 @@ public class RpcEngine
                 metadata.SupplementalAttributes[type] = supplementalAttribute;
             }
 
-            // validate return type
-            var taskWrappedResponseType = typeof(Task<>).MakeGenericType(metadata.ResponseType);
-
-            var taskAndResultWrappedResponseType = typeof(Task<>).MakeGenericType(typeof(Result<>).MakeGenericType(metadata.ResponseType));
-
-            if (metadata.HandlerMethod.ReturnType != taskAndResultWrappedResponseType && metadata.HandlerMethod.ReturnType != taskWrappedResponseType)
-            {
-                throw new DetailedException(
-                    $"Only {nameof(Task)}<{metadata.ResponseType}> and {nameof(Task)}<{nameof(Result)}<{metadata.ResponseType}>> are supported for" +
-                    $" handler method `{metadata.DeclaringType.Name}.{metadata.HandlerMethod.Name}`.");
-            }
+            ValidateReturnType(metadata);
 
             // validate middleware types 
             if (options.MiddlewareTypes == null)
@@ -181,9 +194,9 @@ public class RpcEngine
         this.convertReturnValue = GetConvertReturnValue();
     }
 
-    private static Func<Task, Result<object>> GetConvertReturnValue()
+    private static Func<Task, Result<object, object>> GetConvertReturnValue()
     {
-        var method = new DynamicMethod("convertReturnValue", typeof(Result<object>), new[] { typeof(Task) });
+        var method = new DynamicMethod("convertReturnValue", typeof(Result<object, object>), new[] { typeof(Task) });
 
         var il = method.GetILGenerator();
 
@@ -201,21 +214,21 @@ public class RpcEngine
         il.MarkLabel(afterNullCheckLabel);
 
         il.Emit(OpCodes.Dup);
-        il.Emit(OpCodes.Isinst, typeof(Result));
+        il.Emit(OpCodes.Isinst, typeof(ResultBase));
 
         var nonResultLabel = il.DefineLabel();
         il.Emit(OpCodes.Brfalse_S, nonResultLabel);
-        il.Emit(OpCodes.Callvirt, typeof(Result).GetMethod(nameof(Result.ToGeneralForm))!);
+        il.Emit(OpCodes.Callvirt, typeof(ResultBase).GetMethod(nameof(ResultBase.ToGeneralForm))!);
         il.Emit(OpCodes.Ret);
 
         il.MarkLabel(nonResultLabel);
 
-        il.Emit(OpCodes.Call, typeof(Result).GetMethods()
-            .First(x => x.Name == nameof(Result.Ok) && x.IsGenericMethod && x.GetParameters().Length == 1)
+        il.Emit(OpCodes.Call, typeof(ResultBase).GetMethods()
+            .First(x => x.Name == nameof(ResultBase.Ok) && x.IsGenericMethod && x.GetParameters().Length == 1)
             .MakeGenericMethod(typeof(object)));
         il.Emit(OpCodes.Ret);
 
-        return method.CreateDelegate<Func<Task, Result<object>>>();
+        return method.CreateDelegate<Func<Task, Result<object, object>>>();
     }
 
     private static RpcRequestDelegate CompileHandlerWithMiddleware(RpcRequestMetadata metadata)
@@ -360,7 +373,7 @@ public class RpcEngine
         return run;
     }
 
-    public async Task<Result<object>> Execute(RpcRequestMessage requestMessage, InstanceProvider instanceProvider)
+    public async Task<Result<object, object>> Execute(RpcRequestMessage requestMessage, InstanceProvider instanceProvider)
     {
         if (requestMessage == null)
         {
@@ -426,7 +439,7 @@ public class RpcContext
 
     public Task ResponseTask { get; set; }
 
-    public void SetResponse(Result result)
+    public void SetResponse(Result<object, object> result)
     {
         this.ResponseTask = Task.FromResult(result);
     }
