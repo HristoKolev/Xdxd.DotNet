@@ -4,9 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <IsPackable>true</IsPackable>
-    <VersionPrefix>1.0.1</VersionPrefix>
-    <Version>1.0.1</Version>
-    <PackageVersion>1.0.1</PackageVersion>
+    <VersionPrefix>1.0.2</VersionPrefix>
+    <Version>1.0.2</Version>
+    <PackageVersion>1.0.2</PackageVersion>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <PackAsTool>true</PackAsTool>
