@@ -3,7 +3,6 @@ namespace Xdxd.DotNet.Shared.Tests;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Shared;
 using Xunit;
 
 public class AsyncLockTest

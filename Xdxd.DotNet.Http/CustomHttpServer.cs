@@ -61,7 +61,7 @@ public class CustomHttpServerImpl : CustomHttpServer
                     {
                         var lifetime = app.ApplicationServices.GetService<IHostApplicationLifetime>();
 
-                        var addresses = app.ServerFeatures.Get<IServerAddressesFeature>().Addresses.ToArray();
+                        var addresses = app.ServerFeatures.Get<IServerAddressesFeature>()!.Addresses.ToArray();
 
                         lifetime!.ApplicationStarted.Register(() => this.Started?.Invoke(addresses));
                         lifetime.ApplicationStopping.Register(() => this.Stopping?.Invoke());
@@ -86,7 +86,7 @@ public class CustomHttpServerImpl : CustomHttpServer
         var server = this.host.Services.GetService<IServer>();
         var addressesFeature = server!.Features.Get<IServerAddressesFeature>();
 
-        this.boundAddresses = addressesFeature.Addresses.ToArray();
+        this.boundAddresses = addressesFeature!.Addresses.ToArray();
 
         this.started = true;
     }

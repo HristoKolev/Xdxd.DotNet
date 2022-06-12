@@ -191,7 +191,7 @@ In an event that the next link in the chain (another middleware or the handler i
 
 ### Supplemental attributes
 
-Supplemental attributes are attributes that derive from `RpcSupplementalAttribute`. When a new `RpcEngine` instance is created supplemental attributes are collected from handler methods and their declaring type. They can be accessed by middleware using `context.GetSupplementalAttribute<AttributeType>`. Only one attribute specification is taken into account for each request type and if attributes are specified on both the handler method and it's declaring type - the one from the method is taken into account and the one from the type is ignored.
+Supplemental attributes are attributes that derive from `RpcSupplementalAttribute`. When a new `RpcEngine` instance is created, supplemental attributes are collected from handler methods and their declaring type. They can be accessed by middleware using `context.GetSupplementalAttribute<AttributeType>`. Only one attribute specification is taken into account for each request type and if attributes are specified on both the handler method and it's declaring type - the one from the method is taken into account and the one from the type is ignored.
 
 Here is an example of supplemental attribute usage:
 

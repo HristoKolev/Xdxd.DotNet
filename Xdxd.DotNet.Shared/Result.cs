@@ -1,71 +1,60 @@
 namespace Xdxd.DotNet.Shared;
 
-// /// <summary>
-// /// Simple result type, uses generic T for the value and string[] for the errors.
-// /// Defines a bunch of constructor methods for convenience.
-// /// </summary>
-// public class Result
-// {
-//     public bool IsOk => this.ErrorMessages == default || this.ErrorMessages.Length == 0;
-//
-//     public string[] ErrorMessages { get; set; }
-//
-//     public static Result Ok()
-//     {
-//         return new Result();
-//     }
-//
-//     public static Result<T> Ok<T>(T payload)
-//     {
-//         return new Result<T> { Payload = payload };
-//     }
-//
-//     public static Result<T> Ok<T>()
-//     {
-//         return new Result<T> { Payload = default };
-//     }
-//
-//     public static Result<T> Error<T>(string message)
-//     {
-//         return new Result<T> { ErrorMessages = new[] { message } };
-//     }
-//
-//     public static Result<T> Error<T>(string[] errorMessages)
-//     {
-//         return new Result<T> { ErrorMessages = errorMessages };
-//     }
-//
-//     public static Result Error(string message)
-//     {
-//         return new Result { ErrorMessages = new[] { message } };
-//     }
-//
-//     public static Result Error(string[] errorMessages)
-//     {
-//         return new Result { ErrorMessages = errorMessages };
-//     }
-//
-//     public virtual Result<object> ToGeneralForm()
-//     {
-//         return new Result<object>
-//         {
-//             ErrorMessages = this.ErrorMessages,
-//             Payload = null,
-//         };
-//     }
-// }
+using System;
+using System.ComponentModel;
 
-public abstract class ResultBase
+public abstract class Result
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public abstract Result<object, object> ToGeneralForm();
 
-    public static Result<TPayload, object> Ok<TPayload>(TPayload payload)
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public abstract Type GetPayloadType();
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public abstract Type GetErrorType();
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public abstract bool GetIsOk();
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public abstract object GetPayload();
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public abstract object GetError();
+
+    public static Result<TPayload, TError> Ok<TPayload, TError>()
     {
-        return new Result<TPayload, object>(true, payload, default);
+        return new(true, default, default);
+    }
+
+    public static Result<TPayload, TError> Ok<TPayload, TError>(TPayload payload)
+    {
+        return new(true, payload, default);
+    }
+
+    public static Result<TPayload, string[]> Ok<TPayload>(TPayload payload)
+    {
+        return new(true, payload, default);
+    }
+
+    public static Result<TPayload, string[]> Ok<TPayload>()
+    {
+        return new(true, default, default);
+    }
+
+    public static Result<object, object> Ok()
+    {
+        return new(true, default, default);
+    }
+
+    public static Result<TPayload, TError> Fail<TPayload, TError>(TError error)
+    {
+        return new(false, default, error);
     }
 }
 
-public class Result<TPayload, TError> : ResultBase
+public class Result<TPayload, TError> : Result
 {
     public Result(bool isOk, TPayload payload, TError error)
     {
@@ -80,47 +69,39 @@ public class Result<TPayload, TError> : ResultBase
 
     public TPayload Payload { get; }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public override Result<object, object> ToGeneralForm()
     {
-        return new Result<object, object>(this.IsOk, this.Payload, this.Error);
+        return new(this.IsOk, this.GetPayload(), this.GetError());
     }
 
-    // public static Result<TPayload, TError> Ok()
-    // {
-    //     return new() { IsOk = true, Payload = default, Error = default };
-    // }
-    //
-    // public static Result<TPayload, TError> Ok(TPayload payload)
-    // {
-    //     return new() { IsOk = true, Payload = payload, Error = default };
-    // }
-    //
-    // public static Result<TPayload, TError> Fail(TError error)
-    // {
-    //     return new() { IsOk = false, Payload = default, Error = error };
-    // }
-}
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override Type GetPayloadType()
+    {
+        return typeof(TPayload);
+    }
 
-// public static implicit operator Result<TPayload, TError>(TPayload payload)
-// {
-//     return Ok(x);
-// }
-//
-// public static implicit operator Result<T>(string errorMessage)
-// {
-//     return Error<T>(errorMessage);
-// }
-//
-// public static implicit operator Result<T>(string[] errorMessages)
-// {
-//     return Error<T>(errorMessages);
-// }
-//
-// public Result<object, object> ToGeneralForm()
-// {
-//     return new Result<object, object>
-//     {
-//         Payload = this.Payload,
-//         Error = this.Error,
-//     };
-// }
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override Type GetErrorType()
+    {
+        return typeof(TError);
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override bool GetIsOk()
+    {
+        return this.IsOk;
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override object GetPayload()
+    {
+        return this.Payload;
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override object GetError()
+    {
+        return this.Error;
+    }
+}

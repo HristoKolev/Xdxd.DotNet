@@ -1,6 +1,5 @@
 namespace Xdxd.DotNet.Postgres.Tests;
 
-using Postgres;
 using Testing;
 
 public abstract class TestPocosDatabaseTest : DatabaseTest<IDbService<TestDbPocos>, TestDbPocos>

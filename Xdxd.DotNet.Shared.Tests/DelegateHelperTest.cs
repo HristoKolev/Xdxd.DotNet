@@ -2,7 +2,6 @@ namespace Xdxd.DotNet.Shared.Tests;
 
 using System;
 using System.Threading.Tasks;
-using Shared;
 using Xunit;
 
 public class DelegateHelperTest

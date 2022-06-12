@@ -30,13 +30,42 @@ public class RpcEngine
             return;
         }
 
-        bool invalid = !returnType.IsGenericType ||
-                       returnType.GetGenericTypeDefinition() != typeof(Task<>) ||
-                       !returnType.GenericTypeArguments.First().IsGenericType ||
-                       returnType.GenericTypeArguments.First().GetGenericTypeDefinition() != typeof(Result<,>) ||
-                       returnType.GenericTypeArguments.First().GenericTypeArguments.First() != metadata.ResponseType;
+        Type GetTaskResultType(Type type)
+        {
+            if (type == null)
+            {
+                return null;
+            }
 
-        if (invalid)
+            if (!type.IsGenericType)
+            {
+                return null;
+            }
+
+            if (type.GetGenericTypeDefinition() != typeof(Task<>))
+            {
+                return null;
+            }
+
+            return type.GenericTypeArguments.First();
+        }
+
+        Type GetPayloadType(Type possibleResultType)
+        {
+            if (possibleResultType == null)
+            {
+                return null;
+            }
+
+            if (possibleResultType.IsGenericType && possibleResultType.GetGenericTypeDefinition() == typeof(Result<,>))
+            {
+                return possibleResultType.GenericTypeArguments.First();
+            }
+
+            return GetPayloadType(possibleResultType.BaseType);
+        }
+
+        if (GetPayloadType(GetTaskResultType(returnType)) != metadata.ResponseType)
         {
             throw new DetailedException(
                 $"Only {nameof(Task)}<{metadata.ResponseType}> and {nameof(Task)}<{nameof(Result<object, object>)}<{metadata.ResponseType}, TError>> are supported for" +
@@ -214,17 +243,17 @@ public class RpcEngine
         il.MarkLabel(afterNullCheckLabel);
 
         il.Emit(OpCodes.Dup);
-        il.Emit(OpCodes.Isinst, typeof(ResultBase));
+        il.Emit(OpCodes.Isinst, typeof(Result));
 
         var nonResultLabel = il.DefineLabel();
         il.Emit(OpCodes.Brfalse_S, nonResultLabel);
-        il.Emit(OpCodes.Callvirt, typeof(ResultBase).GetMethod(nameof(ResultBase.ToGeneralForm))!);
+        il.Emit(OpCodes.Callvirt, typeof(Result).GetMethod(nameof(Result.ToGeneralForm))!);
         il.Emit(OpCodes.Ret);
 
         il.MarkLabel(nonResultLabel);
 
-        il.Emit(OpCodes.Call, typeof(ResultBase).GetMethods()
-            .First(x => x.Name == nameof(ResultBase.Ok) && x.IsGenericMethod && x.GetParameters().Length == 1)
+        il.Emit(OpCodes.Call, typeof(RpcResultHelper).GetMethods()
+            .First(x => x.Name == nameof(RpcResultHelper.CreateOkResultFromPayload) && x.IsGenericMethod && x.GetParameters().Length == 1)
             .MakeGenericMethod(typeof(object)));
         il.Emit(OpCodes.Ret);
 
@@ -397,12 +426,7 @@ public class RpcEngine
             throw new DetailedException($"No RPC handler for request `{requestMessage.Type}`.");
         }
 
-        var context = new RpcContext
-        {
-            HandlerParameters = new Dictionary<Type, object>(),
-            RequestMetadata = metadata,
-            RequestMessage = requestMessage,
-        };
+        var context = new RpcContext(metadata, requestMessage);
 
         await metadata.CompiledMethod(context, instanceProvider);
 
@@ -430,12 +454,19 @@ public class RpcEngine
 /// </summary>
 public class RpcContext
 {
-    public RpcRequestMessage RequestMessage { get; set; }
+    public RpcRequestMessage RequestMessage { get; }
 
-    public RpcRequestMetadata RequestMetadata { get; set; }
+    public RpcRequestMetadata RequestMetadata { get; }
 
     // ReSharper disable once CollectionNeverQueried.Global
-    public Dictionary<Type, object> HandlerParameters { get; set; }
+    public Dictionary<Type, object> HandlerParameters { get; }
+
+    internal RpcContext(RpcRequestMetadata metadata, RpcRequestMessage requestMessage)
+    {
+        this.HandlerParameters = new Dictionary<Type, object>();
+        this.RequestMetadata = metadata;
+        this.RequestMessage = requestMessage;
+    }
 
     public Task ResponseTask { get; set; }
 
@@ -527,4 +558,12 @@ public class RpcRequestMessage
     public object Payload { get; set; }
 
     public string Type { get; set; }
+}
+
+internal static class RpcResultHelper
+{
+    public static Result<TPayload, object> CreateOkResultFromPayload<TPayload>(TPayload payload)
+    {
+        return new Result<TPayload, object>(true, payload, default);
+    }
 }

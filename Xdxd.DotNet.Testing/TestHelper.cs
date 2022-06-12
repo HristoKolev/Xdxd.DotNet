@@ -43,7 +43,6 @@ public static class TestHelper
         return content;
     }
 
-
     public static TestConfig TestConfig
     {
         get

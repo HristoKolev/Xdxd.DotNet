@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NpgsqlTypes;
-using Postgres;
 
 public class GeneratedData<T> : IEnumerable<object[]>
     where T : class, IReadOnlyPoco<T>, new()

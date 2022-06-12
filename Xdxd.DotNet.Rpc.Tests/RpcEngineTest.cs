@@ -1240,6 +1240,47 @@ public class RpcEngineTest
     }
 
     [Fact]
+    public async Task Execute_can_return_task_of_derivative_of_result_of_response()
+    {
+        var rpcEngine = new RpcEngine(new RpcEngineOptions
+        {
+            PotentialHandlerTypes = new[]
+            {
+                typeof(ObjectTaskOfDerivativeOfResultOfResponseTestHandler),
+            },
+        });
+
+        var rpcRequestMessage = new RpcRequestMessage
+        {
+            Payload = new ExecutorTestRequest(),
+            Type = nameof(ExecutorTestRequest),
+        };
+
+        var result = await rpcEngine.Execute(rpcRequestMessage, GetDefaultInstanceProvider());
+
+        var response = (ExecutorTestResponse)result.Payload;
+
+        Assert.Equal(123, response.Number);
+    }
+
+    public class CustomResultType<T> : Result<T, string[]>
+    {
+        public CustomResultType(bool isOk, T payload, string[] error) : base(isOk, payload, error) { }
+    }
+
+    public class ObjectTaskOfDerivativeOfResultOfResponseTestHandler
+    {
+        [RpcBind(typeof(ExecutorTestRequest), typeof(ExecutorTestResponse))]
+        public Task<CustomResultType<ExecutorTestResponse>> RpcMethod1(ExecutorTestRequest req)
+        {
+            return Task.FromResult(new CustomResultType<ExecutorTestResponse>(true, new ExecutorTestResponse
+            {
+                Number = 123,
+            }, default));
+        }
+    }
+
+    [Fact]
     public async Task Execute_can_return_task_of_result()
     {
         var rpcEngine = new RpcEngine(new RpcEngineOptions
@@ -1270,10 +1311,10 @@ public class RpcEngineTest
         [RpcBind(typeof(ExecutorTestRequest), typeof(ExecutorTestResponse))]
         public Task<Result<ExecutorTestResponse, object>> RpcMethod1(ExecutorTestRequest req)
         {
-            return Task.FromResult(ResultBase.Ok(new ExecutorTestResponse
+            return Task.FromResult(new Result<ExecutorTestResponse, object>(true, new ExecutorTestResponse
             {
                 Number = 123,
-            }));
+            }, default));
         }
     }
 

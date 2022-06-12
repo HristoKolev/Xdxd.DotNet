@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 public static class InputValidator
 {
-    public static Result Validate<T>(T obj)
+    public static Result<T, string[]> Validate<T>(T obj)
     {
         bool isValid = true;
 
@@ -48,10 +48,10 @@ public static class InputValidator
 
         if (isValid)
         {
-            return Result.Ok();
+            return Result.Ok(obj);
         }
 
-        return Result.Error(errorMessages.ToArray());
+        return Result.Fail<T, string[]>(errorMessages.ToArray());
     }
 }
 

@@ -12,7 +12,6 @@ using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using Http;
 using Microsoft.AspNetCore.Http;
 using Shared;
 using Testing;

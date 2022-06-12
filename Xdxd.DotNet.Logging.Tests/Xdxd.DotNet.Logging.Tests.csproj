@@ -11,10 +11,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Xdxd.DotNet.Testing\Xdxd.DotNet.Testing.csproj" />
+    <ProjectReference Include="..\Xdxd.DotNet.Testing\Xdxd.DotNet.Testing.csproj"/>
   </ItemGroup>
 </Project>

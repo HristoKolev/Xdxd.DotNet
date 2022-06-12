@@ -1,6 +1,5 @@
 namespace Xdxd.DotNet.Shared.Tests;
 
-using Shared;
 using Xunit;
 
 public class RngServiceImplTest

@@ -3,7 +3,6 @@ namespace Xdxd.DotNet.Logging.Tests;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Logging;
 using Shared;
 using Testing;
 using Xunit;

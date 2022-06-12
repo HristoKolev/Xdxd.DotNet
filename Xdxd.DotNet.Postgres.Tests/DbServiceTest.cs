@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Npgsql;
 using NpgsqlTypes;
-using Postgres;
 using Testing;
 using Xunit;
 
@@ -433,14 +432,14 @@ public class ConnectionExtensionsTest : TestPocosDatabaseTest
     public void CreateParameter_boxed()
     {
         var parameter1 = this.Connection.CreateParameter("p1", (object)1);
-        Assert.Equal(1, (int)parameter1.Value);
+        Assert.Equal(1, (int)parameter1.Value!);
     }
 
     [Fact]
     public void CreateParameter_with_inferred_npgsql_type()
     {
         var parameter = this.Connection.CreateParameter("p1", 1);
-        Assert.Equal(1, (int)parameter.Value);
+        Assert.Equal(1, (int)parameter.Value!);
     }
 
     [Fact]

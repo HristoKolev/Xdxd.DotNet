@@ -4,7 +4,6 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Shared;
 using Xunit;
 
 public class FileWatcherTest

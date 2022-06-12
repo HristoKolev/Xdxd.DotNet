@@ -1,7 +1,7 @@
 namespace Xdxd.DotNet.Postgres.Tests;
 
-using Xunit;
 using System.Linq;
+using Xunit;
 
 public class DbFunctionsTests : TestPocosDatabaseTest
 {

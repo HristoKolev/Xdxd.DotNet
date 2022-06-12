@@ -1,7 +1,6 @@
 namespace Xdxd.DotNet.Shared.Tests;
 
 using System.ComponentModel.DataAnnotations;
-using Shared;
 using Testing;
 using Xunit;
 
@@ -58,7 +57,7 @@ public class InputValidatorTest
 
         var expectedMessages = new[] { "__OuterNumber__", "__InnerNumber__" };
 
-        AssertExt.SequentialEqual(expectedMessages, result.ErrorMessages);
+        AssertExt.SequentialEqual(expectedMessages, result.Error);
     }
 
     public class NoAttributeClass { }
