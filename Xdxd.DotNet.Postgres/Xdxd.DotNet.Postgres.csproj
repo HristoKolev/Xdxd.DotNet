@@ -4,16 +4,16 @@
     <LangVersion>latest</LangVersion>
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
     <IsPackable>true</IsPackable>
-    <VersionPrefix>1.0.3</VersionPrefix>
-    <Version>1.0.3</Version>
-    <PackageVersion>1.0.3</PackageVersion>
+    <VersionPrefix>1.0.4</VersionPrefix>
+    <Version>1.0.4</Version>
+    <PackageVersion>1.0.4</PackageVersion>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="linq2db" Version="4.0.1" />
-    <PackageReference Include="Npgsql" Version="6.0.4" />
+    <PackageReference Include="linq2db" Version="4.1.1" />
+    <PackageReference Include="Npgsql" Version="6.0.5" />
   </ItemGroup>
 
   <ItemGroup>
