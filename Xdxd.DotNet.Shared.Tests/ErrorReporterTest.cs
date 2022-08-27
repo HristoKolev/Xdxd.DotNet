@@ -171,10 +171,10 @@ public class ErrorReporterTest
     private const string SENTRY_ORG_NAME = "sentry";
 
     private const string SENTRY_PROJECT_NAME = "error-reporter-test";
-    private const string SENTRY_PROJECT_KEY = "8b4b38e072ad44a1be31fa178eab2762";
-    private const int SENTRY_PROJECT_ID = 4;
+    private const string SENTRY_PROJECT_KEY = "2b14c25e96b84264a8ef51a580d57547";
+    private const int SENTRY_PROJECT_ID = 5;
 
-    private const string SENTRY_BEARER_TOKEN = "15b09b26204e4dc780ba94a197f617f9b548126d5e8d40ddbc678fcb4d05baa1";
+    private const string SENTRY_BEARER_TOKEN = "ba06727045014b60972aa4a6b2e1175a82cf8a2faf974d95a29d774c4f1b45c7";
 
     protected static ErrorReporterImpl CreateReporter()
     {
