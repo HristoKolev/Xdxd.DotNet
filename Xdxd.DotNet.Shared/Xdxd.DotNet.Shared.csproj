@@ -4,9 +4,9 @@
     <LangVersion>latest</LangVersion>
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
     <IsPackable>true</IsPackable>
-    <VersionPrefix>1.0.7</VersionPrefix>
-    <Version>1.0.7</Version>
-    <PackageVersion>1.0.7</PackageVersion>
+    <VersionPrefix>1.0.8</VersionPrefix>
+    <Version>1.0.8</Version>
+    <PackageVersion>1.0.8</PackageVersion>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
   </PropertyGroup>
