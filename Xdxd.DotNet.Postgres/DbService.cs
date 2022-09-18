@@ -491,7 +491,7 @@ public class DbService<TPocos> : IDbService<TPocos> where TPocos : IDbPocos<TPoc
     /// </summary>
     public async Task Copy<T>(IEnumerable<T> pocos) where T : IPoco<T>
     {
-        await using (var importer = this.connection.BeginBinaryImport(this.GetCopyHeader<T>()))
+        await using (var importer = await this.connection.BeginBinaryImportAsync(this.GetCopyHeader<T>()))
         {
             foreach (var poco in pocos)
             {
