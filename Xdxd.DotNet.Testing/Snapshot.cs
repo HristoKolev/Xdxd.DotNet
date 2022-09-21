@@ -233,7 +233,14 @@ public class CustomReporter : IApprovalFailureReporter
             message += new string('=', 30);
             message += "\n\n\n";
 
-            message += $"mv '{receivedFilePath}' '{approvedFilePath}'";
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                message += $"mv -Force '{receivedFilePath}' '{approvedFilePath}'";
+            }
+            else
+            {
+                message += $"mv '{receivedFilePath}' '{approvedFilePath}'";
+            }
 
             message += "\n\n\n";
             message += new string('=', 30);
